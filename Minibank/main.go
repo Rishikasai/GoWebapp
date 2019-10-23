@@ -18,7 +18,7 @@ type User struct {
 }
 
 var templates *template.Template
-var store = sessions.NewCookieStore([]byte("rishika"))
+var store = sessions.NewCookieStore([]byte("secret-password"))
 var db *sql.DB
 var err error
 
@@ -37,7 +37,7 @@ func loginGetHandler(w http.ResponseWriter, r *http.Request) {
 
 func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname")
+	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname")
 	username2 := r.PostForm.Get("username")
 	password2 := r.PostForm.Get("password")
 	Result, err := db.Query("SELECT * FROM users WHERE username=?", username2)
@@ -77,7 +77,7 @@ func registerGetHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerPostHandler(w http.ResponseWriter, r *http.Request) {
-	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname?parseTime=true")
+	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname?parseTime=true")
 	r.ParseForm()
 	username := r.PostForm.Get("username")
 	password := r.PostForm.Get("password")
@@ -96,7 +96,7 @@ func DepositGetHandler(w http.ResponseWriter, r *http.Request) {
 
 func DepositPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname")
+	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -142,7 +142,7 @@ func WithdrawGetHandler(w http.ResponseWriter, r *http.Request) {
 }
 func WithdrawPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname")
+	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -189,7 +189,7 @@ func WithdrawPostHandler(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 }
 func BalanceGetHandler(w http.ResponseWriter, r *http.Request) {
-	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname")
+	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname")
 	session, _ := store.Get(r, "session")
 	untyped, ok := session.Values["username"]
 	if !ok {
@@ -243,3 +243,13 @@ func main() {
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
 }
+/* 
+Query:-:MySQL
+CREATE DATABASE dbname;
+USE dbname;
+CREATE TABLE users(
+username TEXT,
+password TEXT,
+amount INT);
+*/
+
