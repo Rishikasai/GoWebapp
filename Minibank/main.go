@@ -10,6 +10,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -18,9 +19,28 @@ type User struct {
 }
 
 var templates *template.Template
-var store = sessions.NewCookieStore([]byte("secret-password"))
+var store = sessions.NewCookieStore([]byte("rishika"))
 var db *sql.DB
 var err error
+
+func main() {
+	templates = template.Must(template.ParseGlob("templates/*.html"))
+	r := mux.NewRouter()
+	r.HandleFunc("/", homeGetHandler).Methods("GET")
+	r.HandleFunc("/login", loginGetHandler).Methods("GET")
+	r.HandleFunc("/login", loginPostHandler).Methods("POST")
+	r.HandleFunc("/logout", logoutGetHandler).Methods("GET")
+	r.HandleFunc("/register", registerGetHandler).Methods("GET")
+	r.HandleFunc("/register", registerPostHandler).Methods("POST")
+	r.HandleFunc("/deposit", DepositGetHandler).Methods("GET")
+	r.HandleFunc("/deposit", DepositPostHandler).Methods("POST")
+	r.HandleFunc("/withdraw", WithdrawGetHandler).Methods("GET")
+	r.HandleFunc("/withdraw", WithdrawPostHandler).Methods("POST")
+	r.HandleFunc("/checkbal", BalanceGetHandler).Methods("GET")
+	r.HandleFunc("/index", IndexGetHandler).Methods("GET")
+	http.Handle("/", r)
+	http.ListenAndServe(":8080", nil)
+}
 
 func homeGetHandler(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "home.html", nil)
@@ -37,7 +57,7 @@ func loginGetHandler(w http.ResponseWriter, r *http.Request) {
 
 func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname")
+	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname")
 	username2 := r.PostForm.Get("username")
 	password2 := r.PostForm.Get("password")
 	Result, err := db.Query("SELECT * FROM users WHERE username=?", username2)
@@ -55,12 +75,12 @@ func loginPostHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err.Error())
 	}
-	if user.Password != password2 {
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password2))
+	if err != nil {
 		templates.ExecuteTemplate(w, "login.html", "invalid login")
 		return
 	}
-
-	if user.Password == password2 {
+	if err == nil {
 		session, _ := store.Get(r, "session")
 		session.Values["username"] = username2
 		session.Save(r, w)
@@ -77,12 +97,17 @@ func registerGetHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerPostHandler(w http.ResponseWriter, r *http.Request) {
-	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname?parseTime=true")
+	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname?parseTime=true")
 	r.ParseForm()
 	username := r.PostForm.Get("username")
 	password := r.PostForm.Get("password")
+	cost := bcrypt.DefaultCost
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), cost)
+	if err != nil {
+		return
+	}
 	amount := 0
-	_, err = db.Exec(`INSERT INTO users (username, password, amount) VALUES (?, ?, ?)`, username, password, amount)
+	_, err = db.Exec(`INSERT INTO users (username, password, amount) VALUES (?, ?, ?)`, username, hash, amount)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -96,7 +121,7 @@ func DepositGetHandler(w http.ResponseWriter, r *http.Request) {
 
 func DepositPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname")
+	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -142,7 +167,7 @@ func WithdrawGetHandler(w http.ResponseWriter, r *http.Request) {
 }
 func WithdrawPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname")
+	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -189,7 +214,7 @@ func WithdrawPostHandler(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 }
 func BalanceGetHandler(w http.ResponseWriter, r *http.Request) {
-	db, err := sql.Open("mysql", "root:password@(127.0.0.1:3306)/dbname")
+	db, err := sql.Open("mysql", "root:rishika@(127.0.0.1:3306)/dbname")
 	session, _ := store.Get(r, "session")
 	untyped, ok := session.Values["username"]
 	if !ok {
@@ -225,31 +250,15 @@ func IndexGetHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	templates.ExecuteTemplate(w, "index.html", username2)
 }
-func main() {
-	templates = template.Must(template.ParseGlob("templates/*.html"))
-	r := mux.NewRouter()
-	r.HandleFunc("/", homeGetHandler).Methods("GET")
-	r.HandleFunc("/login", loginGetHandler).Methods("GET")
-	r.HandleFunc("/login", loginPostHandler).Methods("POST")
-	r.HandleFunc("/logout", logoutGetHandler).Methods("GET")
-	r.HandleFunc("/register", registerGetHandler).Methods("GET")
-	r.HandleFunc("/register", registerPostHandler).Methods("POST")
-	r.HandleFunc("/deposit", DepositGetHandler).Methods("GET")
-	r.HandleFunc("/deposit", DepositPostHandler).Methods("POST")
-	r.HandleFunc("/withdraw", WithdrawGetHandler).Methods("GET")
-	r.HandleFunc("/withdraw", WithdrawPostHandler).Methods("POST")
-	r.HandleFunc("/checkbal", BalanceGetHandler).Methods("GET")
-	r.HandleFunc("/index", IndexGetHandler).Methods("GET")
-	http.Handle("/", r)
-	http.ListenAndServe(":8080", nil)
-}
+
+
 /* 
 Query:-:MySQL
 CREATE DATABASE dbname;
 USE dbname;
 CREATE TABLE users(
 username TEXT,
-password TEXT,
+password BINARY(60),
 amount INT);
 */
 
