@@ -1,0 +1,33 @@
+time="2019-11-04T17:24:33+05:30" level=info msg="User loggedout" event=logout user=rishika
+time="2019-11-04T17:35:14+05:30" level=warning msg="Login failed. Username and Password doesn't match" event=logIn user=hello
+time="2019-11-04T17:35:30+05:30" level=info msg="User loggedIn" event=logIn user=rishika
+time="2019-11-04T17:35:36+05:30" level=info msg="Amount Deposited" amount=3000 event=Deposit user=rishika
+time="2019-11-04T17:35:40+05:30" level=info msg="Amount Withdrawed" amount=0 event=Withdraw user=rishika
+time="2019-11-04T17:35:41+05:30" level=info msg="User checked Balance" event="Balance Checked" user=rishika
+time="2019-11-04T17:35:45+05:30" level=info msg="Amount Deposited" amount=1000 event=Deposit user=rishika
+time="2019-11-04T17:35:47+05:30" level=info msg="User loggedout" event=logout user=rishika
+time="2019-11-04T17:37:50+05:30" level=fatal msg="Login failed. Username and Password doesn't match" event=logIn user=hello
+time="2019-11-04T17:38:45+05:30" level=warning msg="Login failed. Username and Password doesn't match" event=logIn user=hello
+time="2019-11-04T17:38:50+05:30" level=info msg="User loggedIn" event=logIn user=rishika
+time="2019-11-04T17:38:53+05:30" level=info msg="User checked Balance" event="Balance Checked" user=rishika
+time="2019-11-04T17:40:45+05:30" level=info msg="User loggedout" event=logout user=rishika
+time="2019-11-04T17:41:03+05:30" level=info msg="User loggedIn" event=logIn user=new
+time="2019-11-04T17:41:09+05:30" level=info msg="Amount Withdrawed" amount=1000 event=Withdraw user=new
+time="2019-11-04T17:41:14+05:30" level=info msg="Amount Deposited" amount=3000 event=Deposit user=new
+time="2019-11-04T17:41:17+05:30" level=info msg="User checked Balance" event="Balance Checked" user=new
+time="2019-11-04T17:41:22+05:30" level=info msg="Amount Withdrawed" amount=1000 event=Withdraw user=new
+time="2019-11-04T18:40:42+05:30" level=warning msg="Login failed. Username and Password doesn't match" event=logIn user=ram
+time="2019-11-04T18:40:46+05:30" level=info msg="User loggedIn" event=logIn user=rishika
+time="2019-11-04T18:40:50+05:30" level=info msg="Amount Deposited" amount=4000 event=Deposit user=rishika
+time="2019-11-04T18:40:52+05:30" level=info msg="User loggedout" event=logout user=rishika
+time="2019-11-04T18:53:35+05:30" level=info msg="User loggedIn" event=logIn user=rishika
+time="2019-11-04T18:53:39+05:30" level=info msg="Amount Deposited" amount=7000 event=Deposit user=rishika
+time="2019-11-04T18:53:42+05:30" level=info msg="Amount Withdrawed" amount=3000 event=Withdraw user=rishika
+time="2019-11-04T18:53:43+05:30" level=info msg="User checked Balance" event="Balance Check" user=rishika
+time="2019-11-04T18:53:46+05:30" level=info msg="User loggedout" event=logout user=rishika
+time="2019-11-04T18:53:51+05:30" level=info msg="New User got Registered" event=Register user=ram
+time="2019-11-04T18:53:53+05:30" level=warning msg="Login failed. Username and Password doesn't match" event=logIn user=
+time="2019-11-04T18:53:57+05:30" level=info msg="User loggedIn" event=logIn user=ram
+time="2019-11-04T18:53:59+05:30" level=info msg="User checked Balance" event="Balance Check" user=ram
+time="2019-11-04T18:55:23+05:30" level=info msg="Amount Deposited" amount=1000 event=Deposit user=ram
+time="2019-11-04T18:56:50+05:30" level=info msg="Amount Deposited" amount=1000 event=Deposit user=ram
