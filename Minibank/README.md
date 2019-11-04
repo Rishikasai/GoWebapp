@@ -1,3 +1,4 @@
 A Minibank web application consisting of LOGIN, REGISTER, LOGOUT, DEPOSIT, WITHDRAW AND BALANCE_CHECK Modules.
-
-Created using Go Framework: Gorilla - (mux & sessions) and MySQL
+All the Transactions are logged into the file logrus.log
+A seperate package was created for DB connection information.
+Created using Go Framework: Gorilla - (mux & sessions) , MySQL and logrus
