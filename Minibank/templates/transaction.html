@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title>Transactions</title>
+        
+    </head>
+    <body>
+       <div align= "center"> <h2>All Transactions</h2></div>>
+        <br>
+        <br>
+    
+            <table border="1" align="center" >
+                    <thead>
+                    <tr>
+                      <td>amount</td>
+                      <td>Transaction Type</td>
+                      <td>sender</td>
+                      <td>receiver</td>
+                    </tr>
+                     </thead>
+                     <tbody>
+                  {{ range . }}
+                    <tr>
+                      <td>{{ .Amount }}</td>
+                      <td> {{ .TransactionType}} </td>
+                      <td>{{ .Sender }} </td> 
+                      <td>{{ .Receiver }} </td> 
+                      
+                    </tr>
+                  {{ end }}
+                     </tbody>
+                  </table> 
+ 
+    </body>
+</html>
